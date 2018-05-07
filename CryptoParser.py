@@ -34,12 +34,13 @@ def crate(crypto_code, crypto_to='USD'):
     return json.dumps(response)
 
 
-@ConvertArgumentTypes(str, int, int, int, str)
-def history(crypto_code: str, time_from: int, time_to: int, resolution: int, crypto_to='USD'):
-    api_res = {1: 'minute', 60: 'hour', 1440: 'day'}
-    limit = (time_to - time_from) // (resolution * 60)
-    request = 'https://min-api.cryptocompare.com/data/histo' + api_res[
-        resolution] + '?fsym=' + crypto_code + '&tsym=' + crypto_to + '&limit=' + str(limit)
+@ConvertArgumentTypes(str, int, int, str, str)
+def history(crypto_code: str, time_from: int, time_to: int, resolution: str, crypto_to='USD'):
+    api_res = {'minute': 1, 'hour': 60, 'day': 1440}
+    limit = (time_to - time_from) // (api_res[resolution] * 60)
+    print(limit)
+    request = 'https://min-api.cryptocompare.com/data/histo' + resolution + '?fsym=' + crypto_code + '&tsym=' + crypto_to + '&limit=' + str(
+        limit) + '&toTs=' + str(time_to)
     # print(request)
     response = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
     # print(response)

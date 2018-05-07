@@ -1,6 +1,8 @@
 from telegram.ext import Updater, CommandHandler
 import CryptoParser
 import logging
+from dateutil import parser as date_parser
+import time
 
 with open('help.txt', 'r') as cur_file:
     help_text = cur_file.read()
@@ -16,7 +18,13 @@ def bot_crate(bot, update):
 
 
 def bot_history(bot, update):
-    CryptoParser.history(*update.message.text.split()[1:])
+    mtext = update.message.text.split()
+    del mtext[0]
+    print(date_parser.parse(mtext[1]))
+    print(date_parser.parse(mtext[2]))
+    time_from = time.mktime(date_parser.parse(mtext[1]).timetuple())
+    time_to = time.mktime(date_parser.parse(mtext[2]).timetuple())
+    CryptoParser.history(mtext[0], int(time_from), int(time_to), *mtext[3:])
     bot.send_photo(chat_id=update.message.chat_id, photo=open('tmp_fig.png', 'rb'))
 
 
