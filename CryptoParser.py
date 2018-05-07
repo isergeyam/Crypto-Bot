@@ -53,6 +53,7 @@ def history(crypto_code: str, time_from: int, time_to: int, resolution: str, cry
     plt.xlabel('Date')
     plt.ylabel(crypto_code + ' to ' + crypto_to)
     plt.savefig('tmp_fig.png')
+    plt.close()
 
 # minput = "".join(open("in.txt", "r").readlines())
 # sys.stdin = io.StringIO(minput)

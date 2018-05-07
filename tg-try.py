@@ -3,6 +3,7 @@ import CryptoParser
 import logging
 from dateutil import parser as date_parser
 import time
+import os
 
 with open('help.txt', 'r') as cur_file:
     help_text = cur_file.read()
@@ -26,6 +27,7 @@ def bot_history(bot, update):
     time_to = time.mktime(date_parser.parse(mtext[2]).timetuple())
     CryptoParser.history(mtext[0], int(time_from), int(time_to), *mtext[3:])
     bot.send_photo(chat_id=update.message.chat_id, photo=open('tmp_fig.png', 'rb'))
+    os.remove('./tmp_fig.png')
 
 
 if __name__ == '__main__':
