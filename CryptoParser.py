@@ -1,7 +1,5 @@
 import json
 import urllib.request
-import sys
-import io
 import matplotlib.dates
 import matplotlib.pyplot as plt
 import datetime
@@ -33,7 +31,7 @@ def crate(crypto_code, crypto_to='USD'):
         urllib.request.urlopen(
             'https://min-api.cryptocompare.com/data/price?fsym=' +
             crypto_code + '&tsyms=' + crypto_to).read().decode('utf-8'))
-    return response
+    return json.dumps(response)
 
 
 @ConvertArgumentTypes(str, int, int, int, str)
@@ -42,9 +40,9 @@ def history(crypto_code: str, time_from: int, time_to: int, resolution: int, cry
     limit = (time_to - time_from) // (resolution * 60)
     request = 'https://min-api.cryptocompare.com/data/histo' + api_res[
         resolution] + '?fsym=' + crypto_code + '&tsym=' + crypto_to + '&limit=' + str(limit)
-    print(request)
+    # print(request)
     response = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
-    print(response)
+    # print(response)
     dates = matplotlib.dates.date2num(list(map(lambda x: datetime.datetime.fromtimestamp(x['time']), response['Data'])))
     values = list(map(lambda x: x['close'], response['Data']))
     plt.scatter(dates, values)
@@ -53,10 +51,9 @@ def history(crypto_code: str, time_from: int, time_to: int, resolution: int, cry
     plt.title(crypto_code + ' currency')
     plt.xlabel('Date')
     plt.ylabel(crypto_code + ' to ' + crypto_to)
-    plt.show()
+    plt.savefig('tmp_fig.png')
 
-
-minput = "".join(open("in.txt", "r").readlines())
-sys.stdin = io.StringIO(minput)
-print(crate(input()))
-print(history(*input().split()))
+# minput = "".join(open("in.txt", "r").readlines())
+# sys.stdin = io.StringIO(minput)
+# print(crate(input()))
+# print(history(*input().split()))

@@ -1,0 +1,4 @@
+Hello! This is CryptoBot.
+Usage:
+/crate crypto crypto_to=USD <-- get current rate of crypto in crypto_to(separated by comma)
+/history crypto_code, time_from time_to, resolution, crypto_to <-- get history of crypto_code from time_from to time_to with given resolution
