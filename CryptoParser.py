@@ -38,12 +38,9 @@ def crate(crypto_code, crypto_to='USD'):
 def history(crypto_code: str, time_from: int, time_to: int, resolution: str, crypto_to='USD'):
     api_res = {'minute': 1, 'hour': 60, 'day': 1440}
     limit = (time_to - time_from) // (api_res[resolution] * 60)
-    print(limit)
     request = 'https://min-api.cryptocompare.com/data/histo' + resolution + '?fsym=' + crypto_code + '&tsym=' + crypto_to + '&limit=' + str(
         limit) + '&toTs=' + str(time_to)
-    # print(request)
     response = json.loads(urllib.request.urlopen(request).read().decode('utf-8'))
-    # print(response)
     dates = matplotlib.dates.date2num(list(map(lambda x: datetime.datetime.fromtimestamp(x['time']), response['Data'])))
     values = list(map(lambda x: x['close'], response['Data']))
     plt.scatter(dates, values)
@@ -54,8 +51,3 @@ def history(crypto_code: str, time_from: int, time_to: int, resolution: str, cry
     plt.ylabel(crypto_code + ' to ' + crypto_to)
     plt.savefig('tmp_fig.png')
     plt.close()
-
-# minput = "".join(open("in.txt", "r").readlines())
-# sys.stdin = io.StringIO(minput)
-# print(crate(input()))
-# print(history(*input().split()))

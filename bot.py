@@ -14,26 +14,27 @@ def start(bot, update):
 
 
 def bot_crate(bot, update):
-    bot.send_message(chat_id=update.message.chat_id,
-                     text=CryptoParser.crate(*update.message.text.split()[1:]))
+    bot.send_message(
+        chat_id=update.message.chat_id,
+        text=CryptoParser.crate(*update.message.text.split()[1:]))
 
 
 def bot_history(bot, update):
     mtext = update.message.text.split()
     del mtext[0]
-    print(date_parser.parse(mtext[1]))
-    print(date_parser.parse(mtext[2]))
     time_from = time.mktime(date_parser.parse(mtext[1]).timetuple())
     time_to = time.mktime(date_parser.parse(mtext[2]).timetuple())
     CryptoParser.history(mtext[0], int(time_from), int(time_to), *mtext[3:])
-    bot.send_photo(chat_id=update.message.chat_id, photo=open('tmp_fig.png', 'rb'))
+    bot.send_photo(
+        chat_id=update.message.chat_id, photo=open('tmp_fig.png', 'rb'))
     os.remove('./tmp_fig.png')
 
 
-if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                        level=logging.INFO)
-    updater = Updater(token='556522621:AAHlCktVBSe7sN2EQv3cqEqGKJJ3C_GLre4')
+def run_bot(token):
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO)
+    updater = Updater(token=token)
     dispatcher = updater.dispatcher
     start_handler = CommandHandler('start', start)
     crate_handler = CommandHandler('crate', bot_crate)
